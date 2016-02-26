@@ -22,13 +22,14 @@ module.exports = {
     var itemLocation = req.body.LatLng;
     var date = req.body.createdAt;
     var create;
+    var eventTime = req.body.eventTime;
 
     //The below line returns promisified version of Item.findOne bound to context Item
     //This is necessary because we will only create a new model after we search the db to see if it already exists
     var findOne = Q.nbind(Item.findOne, Item);
 
     //The below line searches the database for a pre-existing row in db that exactly matches the user input
-    findOne({itemName: itemName, itemLng: itemLocation.lng, itemLat: itemLocation.lat})
+    findOne({itemName: itemName, itemLng: itemLocation.lng, itemLat: itemLocation.lat, eventTime: eventTime})
 
       .then(function(item){
 
@@ -46,7 +47,8 @@ module.exports = {
             itemLocation: itemLocation,
             itemLng: itemLocation.lng,
             itemLat: itemLocation.lat,
-            createdAt: date
+            createdAt: date,
+            eventTime: eventTime
           };
 
           // In mongoose, .create() automaticaly creates AND saves simultaneously
@@ -65,7 +67,7 @@ module.exports = {
   },
 
   //The below function returns all rows from the db. It is called whenever user visits '/' or '/api/links'
-  getAllItems: function(req, res){
+  getAllItems: function(req, res) {
 
     //promisify Item.find so that it can have a .then() chained to it
     var findAll = Q.nbind(Item.find, Item);
@@ -82,7 +84,8 @@ module.exports = {
         console.log('Error when findAll invoked - retrieving all items from db failed. Error: ', err);
       });
   },
-  removeItem: function(req, res){
+
+  removeItem: function(req, res) {
     var itemName = req.body.item;
     var itemLocation = req.body.LatLng;
 

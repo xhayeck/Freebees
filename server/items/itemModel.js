@@ -28,7 +28,13 @@ var ItemSchema = new mongoose.Schema ({
   createdAt: {
     type: Date,
     required: true
+  },
+
+  eventTime: {
+    time: Object,
+    required: false
   }
+
 });
 
 //export the Item mongoose model that will fit into the ItemSchema table
