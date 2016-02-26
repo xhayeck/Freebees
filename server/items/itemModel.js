@@ -28,6 +28,11 @@ var ItemSchema = new mongoose.Schema ({
   createdAt: {
     type: Date,
     required: true
+  },
+
+  eventTime: {
+    type: Object,
+    required: true
   }
 });
 

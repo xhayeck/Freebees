@@ -21,6 +21,7 @@ module.exports = {
     var itemName = req.body.item;
     var itemLocation = req.body.LatLng;
     var date = req.body.createdAt;
+    var eventTime=req.body.eventTime;
     var create;
 
     //The below line returns promisified version of Item.findOne bound to context Item
@@ -46,6 +47,7 @@ module.exports = {
             itemLocation: itemLocation,
             itemLng: itemLocation.lng,
             itemLat: itemLocation.lat,
+            eventTime: eventTime,
             createdAt: date
           };
 
