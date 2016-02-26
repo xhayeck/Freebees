@@ -1,8 +1,77 @@
-var app = angular.module('myApp', ['map.services'])
+var app = angular.module('myApp', ['map.services', 'ui.bootstrap','ngAnimate'])
 
 //dependencies injected include DBActions factory and Map factory
 .controller('FormController', function($scope, $http, DBActions, Map){
   $scope.user = {};
+$scope.datepickers = {
+        dt: false,
+        dtSecond: false
+      }
+$scope.formData = {};
+$scope.today = function() {
+        $scope.formData.dt = new Date();
+      };
+$scope.today();
+
+$scope.showWeeks = true;
+$scope.toggleWeeks = function () {
+$scope.showWeeks = ! $scope.showWeeks;
+};
+
+$scope.clear = function () {
+  $scope.dt = null;
+};
+ // Disable weekend selection
+$scope.disabled = function(date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+      };
+
+      $scope.toggleMin = function() {
+        $scope.minDate = ( $scope.minDate ) ? null : new Date();
+      };
+      $scope.toggleMin();
+
+      $scope.open = function($event, which) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.datepickers[which]= true;
+      };
+
+      $scope.dateOptions = {
+        'year-format': "'yy'",
+        'starting-day': 1
+      };
+
+      $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
+      $scope.format = $scope.formats[0];
+
+
+
+      console.log($scope.formData.dt);
+
+
+  var dateAdjust = function(date) {
+    var obj = {};
+    obj.day = date.getDay();
+    if(obj.day < 10) {
+      obj.day = '0'+obj.day;
+    }
+
+    obj.month = date.getMonth();
+     if(obj.month < 10) {
+      obj.day = '0'+obj.day;
+    }
+    obj.year = date.getYear();;
+    obj.start = 12;
+    obj.end = 13
+    return obj
+  }
+
+
+
+
+
 
   $scope.clearForm = function(){
     //need a way to clear addresses filled with autocomplete, angular doesn't detect autocomplete as a change in DOM
@@ -18,12 +87,13 @@ var app = angular.module('myApp', ['map.services'])
 
   $scope.sendPost = function(){
     //convert inputted item name to lowerCase
+
     var lowerCaseItem = convertToLowerCase($scope.user.item);
     //convert inputted address, need to get value with JS bc angular can't detect autocomplete
     var inputtedAddress = document.getElementById('inputAddress').value;
     Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted){
       //after address converted, save user input item and location to db
-      DBActions.saveToDB({item: lowerCaseItem, LatLng: converted, createdAt: new Date()});
+      DBActions.saveToDB({item: lowerCaseItem, LatLng: converted, createdAt: new Date(), eventTime: dateAdjust($scope.formData.dt)});
     });
     $scope.clearForm();
   };
