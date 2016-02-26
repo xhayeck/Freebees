@@ -9,9 +9,13 @@
     <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular-animate.min.js"></script>
+     
     <script src="/app/app.js"></script>
     <script src="/app/controller.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPvz5GX-N_onKVobBHRUlI_8Z4PtaU9Es&libraries=places&callback=loadAllItems"></script>
+<!--     // <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPvz5GX-N_onKVobBHRUlI_8Z4PtaU9Es&libraries=places&callback=loadAllItems"></script> -->
   </head>
   <body id="#" ng-app="myApp" ng-controller="FormController">
     <nav class="navbar-fixed">
@@ -34,10 +38,29 @@
     <div id="map"></div>
     <div id="inputSection">
       <div id="inputForm">
+    <div class="input-group">
+<label>Select a date</label>  
+    <div class="input-group">
+     <input type="text" class="form-control" uib-datepicker="{{format}}" 
+            name="dt" ng-model="formData.dt" is-open="datepickers.dt" 
+            datepicker-options="dateOptions" ng-required="true" 
+            close-text="Close" />
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="open($event,'dt')">
+            <i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+    </div>  
+      
+
+
+
+
         <form novalidate >
           <h2>Want to give away a Freebee?</h2><br>
           <input placeholder="Your item" type="text" ng-model="user.item">
           <input placeholder="Your address" id="inputAddress" type="text" ng-model="user.location"><br>
+
+
           <button id="fillIp" type="submit" ng-click="ip()">Or use current location</button>
           <div class="spinner"><img src="loading.gif"></div><br><br>
             <button class="yellowButton submitForm" type="submit" ng-click="sendPost()" >
