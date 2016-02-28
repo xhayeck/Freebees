@@ -1,12 +1,13 @@
 var app = angular.module('myApp', ['map.services', 'ui.bootstrap','ngAnimate'])
 
 //dependencies injected include DBActions factory and Map factory
-.controller('FormController', function($scope, $http, DBActions, Map){
+.controller('FormController', function($scope, $http, DBActions, DBWActions, Map){
   $scope.user = {};
+
 $scope.datepickers = {
         dt: false,
         dtSecond: false
-      }
+      };
 $scope.formData = {};
 $scope.today = function() {
         $scope.formData.dt = new Date();
@@ -62,11 +63,11 @@ $scope.disabled = function(date, mode) {
      if(obj.month < 10) {
       obj.day = '0'+obj.day;
     }
-    obj.year = date.getYear();;
+    obj.year = date.getYear();
     obj.start = 12;
-    obj.end = 13
-    return obj
-  }
+    obj.end = 13;
+    return obj;
+  };
 
 
 
@@ -96,6 +97,19 @@ $scope.disabled = function(date, mode) {
       DBActions.saveToDB({item: lowerCaseItem, LatLng: converted, createdAt: new Date(), eventTime: dateAdjust($scope.formData.dt)});
     });
     $scope.clearForm();
+  };
+
+  $scope.sendMPost = function() {
+    var lowerCaseWorker = $scope.user.worker.toLowerCase();
+
+    var inputtedAddress = document.getElementById('inputAddress').value;
+
+    Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted){
+      //after address converted, save user input item and location to db
+      DBWActions.saveToWDB({worker: lowerCaseWorker, LatLng: converted, createdAt: new Date(), eventTime: dateAdjust($scope.formData.dt)});
+    });
+    $scope.clearForm();
+
   };
 
   //this function filters map based on what user enters into filter field
@@ -200,5 +214,43 @@ $scope.disabled = function(date, mode) {
     saveToDB: saveToDB,
     filterDB: filterDB,
     removeFromDB: removeFromDB
+  };
+})
+
+.factory('DBWActions', function($http, Map) {
+  var saveToWDB = function(saveWaa) {
+    return $http.post('/submitWork', saveWaa)
+
+    .then(function(data){
+      stopSpinner();
+
+      Map.addMarker(map, data.data, infoWindow);
+
+    }, function(err){
+      console.log('You f**cked up. Error: ', err);
+    });
+  };
+
+  var filterWDB = function(filtering){
+
+    //gets everything from the db in an obj referenced as data
+    return $http.get('/api/items')
+      .then(function(data){
+
+        
+        var filtered = data.data.filter(function(item){
+          return item.workName.indexOf(filtering) > -1;
+        });
+
+        //re-initialize map with only these markers
+        Map.initMap(filtered);
+      }, function(err){
+        console.log('Error when filterDB invoked - get from "/api/items" failed. Error: ', err);
+      });
+  };
+
+  return {
+    saveToWDB: saveToWDB,
+    filterWDB: filterWDB
   };
 });

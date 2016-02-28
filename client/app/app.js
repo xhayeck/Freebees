@@ -8,8 +8,11 @@ angular.module('map.services', [])
     geocoder: geocoder,
     addMarker: addMarker,
     infoWindow: infoWindow
+    
   };
 });
+
+//all variables are global, NOT in the factory
 
 var map;
 var geocoder;
@@ -83,7 +86,7 @@ var initMap = function(data){
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
 var addMarker = function(map, instance, infoWindow, timeout){
   window.setTimeout(function(){
-    var image = {
+    var image1 = {
       //horizontal bee
       //url: 'https://openclipart.org/image/90px/svg_to_png/221154/Cartoon-Bee.png',
       url: 'https://www.ezphotoshare.com/images/2016/02/18/YFq6s.gif',
@@ -95,21 +98,50 @@ var addMarker = function(map, instance, infoWindow, timeout){
       anchor: new google.maps.Point(0, 61)
     };
 
-    //create a new instance of a google maps marker, will be created for each item in our db
-    var marker = new google.maps.Marker({
-      position: instance.itemLocation,
-      animation: google.maps.Animation.DROP,
-      map: map,
-      icon: image,
-      title: 'Hello World!'
-    });
+    var image2 = {
+      //horizontal bee
+      //url: 'https://openclipart.org/image/90px/svg_to_png/221154/Cartoon-Bee.png',
+      url: 'http://www.i2clipart.com/cliparts/2/1/0/c/clipart-muscle-210c.png',
+      // This marker is 41 pixels wide by 61 pixels high.
+      size: new google.maps.Size(41, 61),
+      // The origin for this image is (0, 0).
+      origin: new google.maps.Point(0, 0),
+      // The anchor for this image is the base of the flagpole at (0, 61).
+      anchor: new google.maps.Point(0, 61)
+    };
 
-    //creates a listener that will attach this instance's data to the global info window and open it
-    google.maps.event.addListener(marker, 'click', function(){
-      //turn our mongo-stored stringified date into a JS date obj that is then formatted
-      infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
-      infoWindow.open(map, this);
-    });
+    //create a new instance of a google maps marker, will be created for each item in our db
+    if(instance.itemName) {
+      var marker = new google.maps.Marker({
+        position: instance.itemLocation,
+        animation: google.maps.Animation.DROP,
+        map: map,
+        icon: image1,
+        title: 'Hello World!'
+      });
+
+      //creates a listener that will attach this instance's data to the global info window and open it
+      google.maps.event.addListener(marker, 'click', function(){
+        //turn our mongo-stored stringified date into a JS date obj that is then formatted
+        infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
+        infoWindow.open(map, this);
+      });
+    } else {
+      var marker = new google.maps.Marker({
+        position: instance.itemLocation,
+        animation: google.maps.Animation.DROP,
+        map: map,
+        icon: image2,
+        title: 'Hello Kitty!'
+      });
+
+      //creates a listener that will attach this instance's data to the global info window and open it
+      google.maps.event.addListener(marker, 'click', function(){
+        //turn our mongo-stored stringified date into a JS date obj that is then formatted
+        infoWindow.setContent(instance.worker+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
+        infoWindow.open(map, this);
+      });
+    }
   }, timeout);
 };
 

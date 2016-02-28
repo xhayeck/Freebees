@@ -15,7 +15,7 @@
      
     <script src="/app/app.js"></script>
     <script src="/app/controller.js"></script>
-<!--     // <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPvz5GX-N_onKVobBHRUlI_8Z4PtaU9Es&libraries=places&callback=loadAllItems"></script> -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf1G5t1UuG2K8QjjxMtog0M6fCR1EH5CQ&libraries=places&callback=loadAllItems"></script>
   </head>
   <body id="#" ng-app="myApp" ng-controller="FormController">
     <nav class="navbar-fixed">
@@ -56,33 +56,40 @@
 
 
         <form novalidate >
-          <h2>Want to give away a Freebee?</h2><br>
+          <h2>Want to give away Stuff?</h2><br>
           <input placeholder="Your item" type="text" ng-model="user.item">
+
           <input placeholder="Your address" id="inputAddress" type="text" ng-model="user.location"><br>
-
-
           <button id="fillIp" type="submit" ng-click="ip()">Or use current location</button>
+          
           <div class="spinner"><img src="loading.gif"></div><br><br>
             <button class="yellowButton submitForm" type="submit" ng-click="sendPost()" >
-              <a href="#">Submit </a>
+              <a href="#">Submit</a>
             </button>
             <button class="yellowButton submitForm" type="submit" ng-click="removePost()">
-              <a href="#"> Delete</a>
+              <a href="#">Delete</a>
             </button>
         </form>
+
+        <form novalidate>
+          <h2>Need some Manual Labor?</h2><br>
+          <input placeholder="eg. plumbing, carpentry, mechanic..." type='text' ng-model='user.worker'><br>
+          <input placeholder="Your address" id="inputAddress" type="text" ng-model="user.location"><br>
+          <button id="fillIp" type="submit" ng-click="ip()">Or use current location</button>
+
+          <div class="spinner"><img src="loading.gif"></div><br><br>
+            <button class="yellowButton submitForm" type="submit" ng-click="sendMPost()" >
+              <a href="#">Submit</a>
+            </button>
+            <button class="yellowButton submitForm" type="submit" ng-click="removePost()">
+              <a href="#">Delete</a>
+            </button>
+        </form>
+        
       </div>
     </div>
     <div id="footerSection">
-      <div>Visit the <a target="_blank" href="https://github.com/INeedClosure/Freebees">repo</a>!</div>
-      <br>
-        <a target="_blank" href="https://www.linkedin.com/in/collin-adams-99018788?trk=nav_responsive_tab_profile"><span>Collin Adams<img src="./collinphoto.jpeg"></span></a>
-        <a target="_blank" href="https://www.linkedin.com/in/alice-kao-94768910?authType=NAME_SEARCH&authToken=wwuT&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A37507591%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1455832165532%2Ctas%3Aalice%20ka"><span>Alice Kao<img src="./alicephoto.jpg"></span></a>
-        <a target="_blank" href="https://github.com/tinkleJess"><span>Jessica Park<img src="./jessicaphoto.jpeg"></span></a>
-        <a target="_blank" href="https://www.linkedin.com/in/michael-a-serna-9a899727?trk=send_invitation_success_message_name&goback=%2Enpv_AAkAAAWpqdABlWdGVJOytmG*4DUiPSbSqm9ULBsg_*1_*1_NAME*4SEARCH_LCwI_*1_en*4US_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1_tyah_*1_*1"><span>Michael Serna<img src="./michaelphoto.jpeg"></span></a>
-        <br></br>
-        <div id="bottomCopyright">
-          &copy;Brought to you by INeedClosure, a subsidiary Company of MKS31<br>611 Mission Street, San Francisco, CA 94105
-        </div>
+      
     </div>
   </body>
 </html>

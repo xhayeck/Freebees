@@ -66,6 +66,52 @@ module.exports = {
       });
   },
 
+  saveWork: function(req,res) {
+
+    var worker = req.body.worker;
+    var workerLocation = req.body.LatLng;
+    var date = req.body.createdAt;
+    var create;
+
+    var findOne = Q.nbind(Item.findOne, Item);
+
+    findOne({
+      worker: worker,
+      workerLng: workerLocation.lng, 
+      workLat: workerLocation.lat
+    })
+
+    then(function(person) {
+      if(person) {
+        console.log("Hey! You're already asking for free labor! Knock it off!");
+        res.status(400).send('invalid request');
+      } else {
+        create = Q.nbind(Item.findOne, Item);
+
+        newWorker = {
+            worker: worker,
+            workLocation: workLocation,
+            workLng: workLocation.lng,
+            workLat: workLocation.lat,
+            eventTime: eventTime,
+            createdAt: date
+          };
+
+          create(newWorker)
+            .then(function(data) {
+              res.send(data);
+            })
+            .catch(function(err) {
+              console.log("Nope. Creation FAILURE. Either didn't create or didn't save to database!")
+            });
+      }
+    })
+
+    .catch(function(err) {
+      console.log('Whoops. Something went wrong buddy. Check error: ', err);
+    });
+  },
+
   //The below function returns all rows from the db. It is called whenever user visits '/' or '/api/links'
   getAllItems: function(req, res){
 
